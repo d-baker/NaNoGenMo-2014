@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 import random
 from pattern.en import referenced, pluralize
+import chainer
+import textwrap
 
 ##############################################################################
 # NaNoGenMo 2014, by dbaker
@@ -27,13 +29,32 @@ PRONOUN = ""
 VERB = ""
 NAME = ""
 
+############################## STRING MANIP TOOLS #############################
+
 def decapitalize(string):
     return string[:1].lower() + string[1:]
 
 def capitalize(string):
     return string[:1].upper() + string[1:]
 
-############################## storytelling tools #############################
+# thankyou helpful person 
+# http://stackoverflow.com/questions/1166317/python-textwrap-library-how-to-preserve-line-breaks
+def wraptext(text, char_lim):
+    new_text = ""
+    lines = text.split("\n")
+
+    for line in lines:
+        if len(line) > char_lim:
+            w = textwrap.TextWrapper(width=char_lim, break_long_words=False)
+            line = '\n'.join(w.wrap(line))
+
+        new_text += line + "\n"
+
+    return new_text
+
+
+############################## STORYTELLING TOOLS #############################
+
 meanwhiles = list(open("resources/meanwhiles.txt").readlines())
 actions = list(open("resources/actions.txt").readlines())
 lost = list(open("resources/lost.txt").readlines())
@@ -65,6 +86,7 @@ def get_lost(string):
 def suddenly(string):
     suddenlies = ["suddenly", "unexpectedly", "without warning", "in an instant"]
     return capitalize(random.choice(suddenlies)) + ", " + string
+
 
 ############################### PARAGRAPHS ###################################
 
@@ -271,6 +293,9 @@ def p10():
 
     return capitalize(p)
 
+
+#########################################################################
+
 def gen():
     text = ""
 
@@ -292,30 +317,72 @@ def gen():
     return text
 
 
+############################### CHAPTERS ################################
+
+def chapter1():
+    lines = "dbaker\nNANODEGENMO: BAROQUE ENCODINGS\nNaNoGenMo 2014\n"
+    title = "\n".join(line.center(70) for line in lines.split("\n"))
+    title += "\n" + "-" * 70 + "\n\n"
+    chapter = "CHAPTER 1\n=========\n\n" + opening() + "\n" + p1() + "\n"
+
+    text = ""
+
+    while len(text.split()) < 100:
+        text += gen()
+
+    with open("/home/dbaker/Desktop/chapter1.txt", "w+") as fp:
+        fp.write(title.encode("utf-8") + chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
+
+
+def chapter2():
+    chapter = "\n\n\nCHAPTER 2\n=========\n\n"
+    text = ""
+
+    while len(text.split()) < 100:
+        text += random.choice(["", "\n"]) + capitalize(chainer.gen("/home/dbaker/Desktop/chapter1.txt").decode("utf-8")) + random.choice([" ", "\n"])
+
+    with open("/home/dbaker/Desktop/chapter2.txt", "w+") as fp:
+        fp.write(chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
+
+
+def chapter3():
+    chapter = "\n\n\nCHAPTER 3\n=========\n\n"
+    text = ""
+
+    while len(text.split()) < 100:
+        text += random.choice(["", "\n"]) + capitalize(chainer.gen("/home/dbaker/Desktop/chapter2.txt").decode("utf-8")) + random.choice([" ", "\n"])
+
+    with open("/home/dbaker/Desktop/chapter3.txt", "w+") as fp:
+        fp.write(chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
+
 ########################################################################
 
 if __name__ == "__main__":
     #PRONOUN = raw_input("what pronoun would you like used throughout the book?\n")
-    #NAME = raw_input("choose a name\n")
-    PRONOUN = "she"
-    NAME = "Sasha"
+    #NAME = capitalize(raw_input("choose a name\n"))
+    PRONOUN = "they"
+    NAME = "asciibat"
 
     if PRONOUN == "they":
         VERB = "were"
     else:
         VERB = "was"
 
-    lines = "dbaker\nBAROQUE ENCODINGS\nNaNoGenMo 2014\n"
-    text = "\n".join(line.center(80) for line in lines.split("\n"))
-    text += "\n------------------------------------------------------------------------------\n\n"
+    chapter1()
+    chapter2()
+    chapter3()
 
-    text += opening() + "\n" + p1() + "\n"
+    chapter1, chapter2, chapter3 = [], [], []
+    with open ("/home/dbaker/Desktop/chapter1.txt") as fp:
+        chapter1 = fp.read()
+    with open ("/home/dbaker/Desktop/chapter2.txt") as fp:
+        chapter2 = fp.read()
+    with open ("/home/dbaker/Desktop/chapter3.txt") as fp:
+        chapter3 = fp.read()
 
-    for i in range (0, 5):
-    #while len(text.split()) < 50000:
-        text += gen()
+    text = chapter1.decode("utf-8") + chapter2.decode("utf-8") + chapter3.decode("utf-8")
+    text = wraptext(text, 70)
 
     with open("/home/dbaker/Desktop/baroque_encodings.txt", "w+") as fp:
         fp.write(text.encode('utf-8'))
 
-    print text
