@@ -4,6 +4,7 @@ import random
 from pattern.en import referenced, pluralize
 import chainer
 import textwrap
+import os
 
 ##############################################################################
 # NaNoGenMo 2014, by dbaker
@@ -22,12 +23,15 @@ qualities = list(open("resources/qualities.txt").readlines())
 pronouns1 = list(open("resources/pronouns1.txt").readlines())
 colors = list(open("resources/colors.txt").readlines())
 
-# TODO multiple forms of pronoun, text replacement for formatting strings
+# TODO multiple forms of pronoun(?), text replacement for formatting strings
 # read from files
 
 PRONOUN = ""
+POS_PRONOUN = ""
 VERB = ""
 NAME = ""
+LENGTH = 0
+NUM_CHAPTERS = 3
 
 ############################## STRING MANIP TOOLS #############################
 
@@ -293,13 +297,27 @@ def p10():
 
     return capitalize(p)
 
+# Alastair Reynolds, "House of Suns"
+def p11():
+    p = "beneath {pronoun2} feet, the {adjective1} {noun1} {verbed} with the {adjective2} {quality} of {nouns1} and {nouns2}.".format(
+        pronoun2 = POS_PRONOUN,
+        adjective1 = random.choice(adjs).strip(),
+        noun1 = random.choice(ns).strip(),
+        verbed = random.choice(verbed).strip(),
+        adjective2 = random.choice(adjs).strip(),
+        quality = random.choice(qualities).strip(),
+        nouns1 = pluralize(random.choice(ns).strip()),
+        nouns2 = pluralize(random.choice(ns).strip())
+    )
+
+    return capitalize(p)
 
 #########################################################################
 
 def gen():
     text = ""
 
-    for i in range(0, random.randint(1, 5)):
+    for i in range(0, random.randint(1, 3)):
         text += random.choice(["", "\n"]) + random.choice(
             [
                 p2(), 
@@ -310,7 +328,8 @@ def gen():
                 p7(), 
                 p8(),
                 p9(),
-                p10()
+                p10(),
+                p11()
             ]
         ) + random.choice([" ", "\n"])
 
@@ -319,70 +338,66 @@ def gen():
 
 ############################### CHAPTERS ################################
 
-def chapter1():
-    lines = "dbaker\nNANODEGENMO: BAROQUE ENCODINGS\nNaNoGenMo 2014\n"
-    title = "\n".join(line.center(70) for line in lines.split("\n"))
-    title += "\n" + "-" * 70 + "\n\n"
-    chapter = "CHAPTER 1\n=========\n\n" + opening() + "\n" + p1() + "\n"
+def gen_chapters():
+    for i in range(1, NUM_CHAPTERS + 1):
+        text = ""
 
-    text = ""
+        if i == 1:
+            lines = "dbaker\nNATIONAL NOVEL DEGENERATION MONTH\nNaNoGenMo 2014\n"
+            title = "\n".join(line.center(70) for line in lines.split("\n"))
+            title += "\n" + "-" * 70 + "\n\n"
+            chapter = "CHAPTER 1\n=========\n\n" + opening() + "\n" + p1() + "\n"
 
-    while len(text.split()) < 100:
-        text += gen()
+            while len(text.split()) < LENGTH / NUM_CHAPTERS:
+                text += gen()
 
-    with open("/home/dbaker/Desktop/chapter1.txt", "w+") as fp:
-        fp.write(title.encode("utf-8") + chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
+            with open("book/chapter1.txt", "w+") as fp:
+                fp.write(title.encode("utf-8") + chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
 
+        else:
+            chapter = "\n\n\nCHAPTER {}\n=========\n\n".format(i)
+            previous_chapter = "book/chapter{}.txt".format(i-1)
+            new_chapter = "book/chapter{}.txt".format(i)
 
-def chapter2():
-    chapter = "\n\n\nCHAPTER 2\n=========\n\n"
-    text = ""
+            while len(text.split()) < LENGTH / NUM_CHAPTERS:
+                text += random.choice(["", "\n"]) + capitalize(chainer.gen(previous_chapter).decode("utf-8")) + random.choice([" ", "\n"])
 
-    while len(text.split()) < 100:
-        text += random.choice(["", "\n"]) + capitalize(chainer.gen("/home/dbaker/Desktop/chapter1.txt").decode("utf-8")) + random.choice([" ", "\n"])
-
-    with open("/home/dbaker/Desktop/chapter2.txt", "w+") as fp:
-        fp.write(chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
-
-
-def chapter3():
-    chapter = "\n\n\nCHAPTER 3\n=========\n\n"
-    text = ""
-
-    while len(text.split()) < 100:
-        text += random.choice(["", "\n"]) + capitalize(chainer.gen("/home/dbaker/Desktop/chapter2.txt").decode("utf-8")) + random.choice([" ", "\n"])
-
-    with open("/home/dbaker/Desktop/chapter3.txt", "w+") as fp:
-        fp.write(chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
+            with open(new_chapter, "w+") as fp:
+                fp.write(chapter.encode("utf-8") + text.rstrip().lstrip().encode('utf-8'))
 
 ########################################################################
 
 if __name__ == "__main__":
     #PRONOUN = raw_input("what pronoun would you like used throughout the book?\n")
     #NAME = capitalize(raw_input("choose a name\n"))
+    #LENGTH = int(raw_input("how many words would you like to generate (roughly)?\n"))
+    #NUM_CHAPTERS = int(raw_input("how many chapters would you like to generate?\n"))
+
     PRONOUN = "they"
     NAME = "asciibat"
+    LENGTH = 1000
 
     if PRONOUN == "they":
         VERB = "were"
+        POS_PRONOUN = "their"
     else:
         VERB = "was"
+        if PRONOUN == "he":
+            POS_PRONOUN = "his"
+        elif PRONOUN == "she":
+            POS_PRONOUN = "her"
 
-    chapter1()
-    chapter2()
-    chapter3()
+    gen_chapters()
 
-    chapter1, chapter2, chapter3 = [], [], []
-    with open ("/home/dbaker/Desktop/chapter1.txt") as fp:
-        chapter1 = fp.read()
-    with open ("/home/dbaker/Desktop/chapter2.txt") as fp:
-        chapter2 = fp.read()
-    with open ("/home/dbaker/Desktop/chapter3.txt") as fp:
-        chapter3 = fp.read()
+    text = ""
+    for i in range(1, NUM_CHAPTERS + 1):
+        with open ("book/chapter{}.txt".format(i)) as fp:
+            text += fp.read().decode("utf-8")
 
-    text = chapter1.decode("utf-8") + chapter2.decode("utf-8") + chapter3.decode("utf-8")
     text = wraptext(text, 70)
 
-    with open("/home/dbaker/Desktop/baroque_encodings.txt", "w+") as fp:
+    with open("book/baroque_encodings.txt", "w+") as fp:
         fp.write(text.encode('utf-8'))
 
+    for i in range(1, NUM_CHAPTERS+1):
+        os.remove("book/chapter" + str(i) + ".txt")
