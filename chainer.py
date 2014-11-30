@@ -1,4 +1,5 @@
 import random
+from bot import capitalize
 ASSOCIATIONS = {}
 
 # ughhh don't ask
@@ -22,14 +23,16 @@ def breakup(sentence):
     if len(sentence) > 1:
         breakup(sentence[1:])
 
-def gen(filepath):
+def gen(filepath, place, name):
     sentences = []
     with open(filepath) as fp:
-        sentences = [w.lower().strip("\n ") for w in fp.read().split(".")]
+        # TODO workaround: avoiding words that need to be capitalized completely
+        sentences = [w.lower().strip("\n ") for w in fp.read().split(".") if place not in w and " i " not in w]
 
     # ugh I can't remember how to fix this
     sentences.remove(sentences[0])
     sentences.remove(sentences[len(sentences)-1])
+
 
     for sentence in sentences:
         breakup(sentence.split())

@@ -15,4 +15,4 @@ def parse_pos(source_filename, output_filename, pos):
 if __name__ == "__main__":
     # refer to the link below for tags that can be used:
     # http://www.clips.ua.ac.be/pages/mbsp-tags
-    parse_pos("full-wordlist.txt", "verbing2.txt", "VBG")
+    parse_pos("full-wordlist.txt", "superlatives.txt", "RBS")
