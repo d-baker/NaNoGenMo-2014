@@ -1,7 +1,7 @@
 Baroque Encodings: A Degenerative Novel
 =======================================
 
-Created for [NaNoGenMo 2014](https://github.com/dariusk/NaNoGenMo-2014). Please excuse the code, it's a mess.
+Created for [NaNoGenMo 2014](https://github.com/dariusk/NaNoGenMo-2014). Please excuse the code, it's a mess...and also probably not quite bug free.
 
 About
 -----
@@ -11,7 +11,7 @@ In each subsequent chapter, the text is slowly mangled as the previous chapter i
 
 Usage
 -----
-This NaNoGenMo is designed so that you can generate your own, customised novel! Just download the zip file or clone this repo, then run `bot.py`. The novel will be generated as a plain text file.
+This NaNoGenMo is designed so that you can generate your own, customised novel! Just download the zip file or clone this repo, then run `bot.py`. The novel will be generated as a plain text file. Be warned: anything longer than a couple of thousand words will probably take a long time/heat up your computer/house/whatever.
 
 A beautifully typeset PDF run of the novel can be downloaded [here](http://memoriata.com/baroque_encodings.pdf).
 

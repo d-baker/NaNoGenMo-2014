@@ -27,7 +27,7 @@ def gen(filepath, place, name):
     sentences = []
     with open(filepath) as fp:
         # TODO workaround: avoiding words that need to be capitalized completely
-        sentences = [w.lower().strip("\n ") for w in fp.read().split(".") if place not in w and " i " not in w]
+        sentences = [s.lower().strip("\n ") for s in fp.read().split(".") if place not in s and " i " not in s]
 
     # ugh I can't remember how to fix this
     sentences.remove(sentences[0])
@@ -40,7 +40,7 @@ def gen(filepath, place, name):
     s = random.choice(sentences)
     words = random.choice(sentences).split()
     i = 0
-    while random.randint(0, len(words)) > 6:
+    while random.randint(0, len(words)-1) > len(words)-1:
         i+=1
 
     seedword = words[i]

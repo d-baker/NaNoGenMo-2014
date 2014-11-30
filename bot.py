@@ -29,8 +29,13 @@ POS_PRONOUN = "their"
 VERB = "were"
 NAME = random.choice([random.choice(fnames), random.choice(mnames)])
 PLACE = random.choice(places)
-LENGTH = 50000
-NUM_CHAPTERS = 3
+LENGTH = random.randint(1000, 50000)
+NUM_CHAPTERS = random.randint(2, 15)
+
+while LENGTH / NUM_CHAPTERS < 100:
+    LENGTH = random.randint(1000, 50000)
+    NUM_CHAPTERS = random.randint(2, 15)
+
 TITLE = "Baroque Encodings: A Degenerative Novel"
 
 ############################## STRING MANIP TOOLS #############################
@@ -455,11 +460,13 @@ if __name__ == "__main__":
     if not pl:
         print("story takes place in {}".format(PLACE))
 
-    l = raw_input("\nhow many words would you like to generate (roughly)? warning: larger numbers will take a long time. (default: {})\n".format(str(LENGTH)))
+    c = raw_input(wraptext("\nhow many chapters would you like to generate? (default: random between 2-15)", 70))
+    if not c:
+        print("number of chapters is {}".format(NUM_CHAPTERS))
 
-    c = raw_input("\nhow many chapters would you like to generate? warning: larger numbers will take a long time. (default: {})\n".format(str(NUM_CHAPTERS)))
-
-    print ("\nplease wait...\n")
+    l = raw_input(wraptext("\nhow many words would you like to generate (roughly)? WARNING: large numbers may take a long time. (default: random between 1000-50000)", 70))
+    if not l:
+        print("number of words is {}".format(LENGTH))
 
     # UGH
     if p:
@@ -470,6 +477,9 @@ if __name__ == "__main__":
         PLACE = pl
     if l:
         LENGTH = int(l)
+        while LENGTH / NUM_CHAPTERS < 100:
+            l = raw_input("\nsorry, that's probably not enough words to split between the chapters. try again:\n")
+            LENGTH = int(l)
     if c:
         NUM_CHAPTERS = int(c)
 
@@ -479,6 +489,9 @@ if __name__ == "__main__":
             POS_PRONOUN = "his"
         elif PRONOUN == "she":
             POS_PRONOUN = "her"
+
+
+    print ("\nplease wait...\n")
 
     gen_chapters()
 
@@ -492,7 +505,8 @@ if __name__ == "__main__":
     with open("baroque_encodings.txt", "w+") as fp:
         fp.write(text.encode('utf-8'))
 
-    print wraptext("\nYour novel has been generated and is located at the path \"baroque_encodings.txt\".", 70)
-
     for i in range(1, NUM_CHAPTERS+1):
         os.remove("chapter" + str(i) + ".txt")
+
+    print wraptext("\nYour novel has been generated and is located in \"baroque_encodings.txt\".", 70)
+
