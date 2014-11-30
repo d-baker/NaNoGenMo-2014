@@ -3,7 +3,7 @@ from bot import capitalize
 ASSOCIATIONS = {}
 
 # ughhh don't ask
-def breakup(sentence):
+def breakup(sentence, place, name):
     max = len(sentence) - 1
 
     for i in range (0, max):
@@ -11,9 +11,15 @@ def breakup(sentence):
             l = ASSOCIATIONS.get(sentence[i])
             if sentence[i+1] not in l:
                 if i >= max:
-                    l.append(sentence[i])
+                    if place in sentence[i] or name in sentence[i]:
+                        l.append(sentence[i])
+                    else:
+                        l.append(sentence[i].lower())
                 else:
-                    l.append(sentence[i+1])
+                    if place in sentence[i+1] or name in sentence[i+1]:
+                        l.append(sentence[i+1])
+                    else:
+                        l.append(sentence[i+1].lower())
         else:
             if i >= max:
                 ASSOCIATIONS[sentence[i]] = [sentence[i]]
@@ -21,13 +27,12 @@ def breakup(sentence):
                 ASSOCIATIONS[sentence[i]] = [sentence[i+1]]
 
     if len(sentence) > 1:
-        breakup(sentence[1:])
+        breakup(sentence[1:], place, name)
 
 def gen(filepath, place, name):
     sentences = []
     with open(filepath) as fp:
-        # TODO workaround: avoiding words that need to be capitalized completely
-        sentences = [s.lower().strip("\n ") for s in fp.read().split(".") if place not in s and " i " not in s]
+        sentences = [s.strip("\n ") for s in fp.read().split(".")]
 
     # ugh I can't remember how to fix this
     sentences.remove(sentences[0])
@@ -35,7 +40,7 @@ def gen(filepath, place, name):
 
 
     for sentence in sentences:
-        breakup(sentence.split())
+        breakup(sentence.split(), place, name)
 
     s = random.choice(sentences)
     words = random.choice(sentences).split()

@@ -500,7 +500,7 @@ if __name__ == "__main__":
         with open ("chapter{}.txt".format(i)) as fp:
             text += fp.read().decode("utf-8")
 
-    text = wraptext(text, 70)
+    #text = wraptext(text, 70)
 
     with open("baroque_encodings.txt", "w+") as fp:
         fp.write(text.encode('utf-8'))
