@@ -421,7 +421,7 @@ def gen_chapters():
         text = ""
 
         if i == 1:
-            lines = "dbaker\n {} \nNaNoGenMo 2014\n".format(TITLE.upper())
+            lines = "\n{} \n\nDorothea Baker | NaNoGenMo 2014\n".format(TITLE.upper())
             title = "\n".join(line.center(70) for line in lines.split("\n"))
             title += "\n" + "-" * 70 + "\n\n"
             chapter = "CHAPTER 1\n=========\n\n" + opening() + "\n" + p1() + "\n"
