@@ -1,1 +1,3 @@
 baroque_encodings.txt
+resources/full-wordlist.txt
+*.pyc
