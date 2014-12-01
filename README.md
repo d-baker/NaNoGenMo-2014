@@ -13,7 +13,7 @@ Usage
 -----
 This NaNoGenMo is designed so that you can generate your own, customised novel! Just download the zip file or clone this repo, then run `bot.py`. The novel will be generated as a plain text file. Be warned: anything longer than a couple of thousand words will probably take a long time/heat up your computer/house/whatever.
 
-A beautifully typeset PDF run of the novel can be downloaded [here](http://memoriata.com/baroque_encodings.pdf).
+~~A beautifully typeset PDF run of the novel can be downloaded [here](http://memoriata.com/baroque_encodings.pdf).~~ **something** is coming soon, but probably not a PDF.
 
 Credits
 -------
