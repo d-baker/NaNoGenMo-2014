@@ -13,7 +13,7 @@ Usage
 -----
 This NaNoGenMo is designed so that you can generate your own, customised novel! Just download the zip file or clone this repo, then run `bot.py`. The novel will be generated as a plain text file. Be warned: anything longer than a couple of thousand words will probably take a long time/heat up your computer/house/whatever.
 
-Two different beautifully typeset PDF runs of the novel can be downloaded from [here](http://memoriata.com/dropbox/baroque_encodings_v1.pdf) and [here](http://memoriata.com/dropbox/baroque_encodings_v2.pdf) respectively. The first version is around ~4000 words (an early test run that turned out too good to trash) and the second is ~50000 words.
+Two different beautifully typeset PDF runs of the novel can be downloaded from [here](http://dreadedvariable.xyz/dropbox/baroque_encodings_v1.pdf) and [here](http://dreadedvariable.xyz/dropbox/baroque_encodings_v2.pdf) respectively. The first version is around ~4000 words (an early test run that turned out too good to trash) and the second is ~50000 words.
 
 Credits
 -------
